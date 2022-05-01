@@ -1,22 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  useDeleteContactMutation,
+  useFetchContactsQuery,
+} from 'services/contactsApi';
+import {
   UsersContactList,
   ContactListItem,
   UserName,
   UserNumber,
   ContactListButton,
 } from './ContactList.styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'components/redux/contactsSlice';
-import { getContacts, getFilter } from 'components/redux/selectors';
+import { useSelector } from 'react-redux';
+// import { deleteContact } from 'redux/contactsSlice';
+import { getFilter } from 'redux/selectors';
+import { TailSpin } from 'react-loader-spinner';
 
 const ContactList = () => {
-  const dispatch = useDispatch();
-  const deleteUser = userId => {
-    dispatch(deleteContact(userId));
-  };
-  const contacts = useSelector(getContacts);
+  const { data: contacts, isFetching } = useFetchContactsQuery();
+  const [deleteContact] = useDeleteContactMutation();
+
   const filter = useSelector(getFilter);
 
   const normalizedFilter = filter.toLowerCase();
@@ -25,12 +28,13 @@ const ContactList = () => {
   );
   return (
     <div>
+      {isFetching && <TailSpin color="#00BFFF" />}
       <UsersContactList>
         {filteredContacts?.map(contact => (
           <ContactListItem key={contact.id}>
             <UserName>{contact.name}</UserName>
-            <UserNumber>{contact.number}</UserNumber>
-            <ContactListButton onClick={() => deleteUser(contact.id)}>
+            <UserNumber>{contact.phone}</UserNumber>
+            <ContactListButton onClick={() => deleteContact(contact.id)}>
               Delete
             </ContactListButton>
           </ContactListItem>

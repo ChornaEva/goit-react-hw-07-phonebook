@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import shortid from 'shortid';
-import PropTypes from 'prop-types';
 import {
   PhonebookTitle,
   PhonebookInputWrapper,
@@ -9,17 +8,19 @@ import {
   AddButton,
 } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'components/redux/contactsSlice';
-import { getContacts } from 'components/redux/selectors';
+import { addContact } from 'redux/contactsSlice';
+import { getContacts } from 'redux/selectors';
+import { useAddContactMutation } from 'services/contactsApi';
 
 const ContactForm = () => {
-  const dispatch = useDispatch();
+  const [addContact] = useAddContactMutation();
+
+  // const dispatch = useDispatch();
 
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-
   const contacts = useSelector(getContacts);
-
+console.log(contacts);
   const handleInputChange = event => {
     const { name, value } = event.currentTarget;
 
@@ -35,19 +36,17 @@ const ContactForm = () => {
     }
   };
 
-  //   // при отправке формы получаем введенные значения и очищаем её
+  // при отправке формы получаем введенные значения и очищаем её
   const handleSubmit = event => {
     event.preventDefault();
-
     // проверяем наличие имени которое записывается и которое уже есть в списке контактов
     // нет-записываем,есть-алерт
-
     if (contacts?.find(contact => contact.name === name)) {
       alert(`${name} is already in contacts`);
     } else {
-      const user = { name, number, id: shortid.generate() };
+      const user = { name, phone: number, id: shortid.generate() };
 
-      dispatch(addContact(user));
+      addContact(user);
       reset();
     }
   };
@@ -58,7 +57,7 @@ const ContactForm = () => {
     setNumber('');
   };
 
-  //   // создаем айди для будущих обьектов
+  // создаем айди для будущих обьектов
   const nameInputId = shortid.generate();
   const numberInputId = shortid.generate();
 
