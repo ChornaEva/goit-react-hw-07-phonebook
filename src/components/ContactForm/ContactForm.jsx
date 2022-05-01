@@ -7,20 +7,18 @@ import {
   PhonebookInput,
   AddButton,
 } from './ContactForm.styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
-import { getContacts } from 'redux/selectors';
-import { useAddContactMutation } from 'services/contactsApi';
+import {
+  useAddContactMutation,
+  useFetchContactsQuery,
+} from 'services/contactsApi';
 
 const ContactForm = () => {
+  const { data: contacts } = useFetchContactsQuery();
   const [addContact] = useAddContactMutation();
-
-  // const dispatch = useDispatch();
 
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const contacts = useSelector(getContacts);
-console.log(contacts);
+
   const handleInputChange = event => {
     const { name, value } = event.currentTarget;
 

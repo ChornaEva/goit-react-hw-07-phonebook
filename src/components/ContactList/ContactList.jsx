@@ -12,7 +12,6 @@ import {
   ContactListButton,
 } from './ContactList.styled';
 import { useSelector } from 'react-redux';
-// import { deleteContact } from 'redux/contactsSlice';
 import { getFilter } from 'redux/selectors';
 import { TailSpin } from 'react-loader-spinner';
 
