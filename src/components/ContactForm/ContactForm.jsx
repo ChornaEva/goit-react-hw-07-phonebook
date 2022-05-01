@@ -34,28 +34,24 @@ const ContactForm = () => {
     }
   };
 
-  // при отправке формы получаем введенные значения и очищаем её
   const handleSubmit = event => {
     event.preventDefault();
-    // проверяем наличие имени которое записывается и которое уже есть в списке контактов
-    // нет-записываем,есть-алерт
+
     if (contacts?.find(contact => contact.name === name)) {
       alert(`${name} is already in contacts`);
     } else {
-      const user = { name, phone: number, id: shortid.generate() };
+      const user = { name, phone: number };
 
       addContact(user);
       reset();
     }
   };
 
-  // после отправки данных очищаем форму
   const reset = () => {
     setName('');
     setNumber('');
   };
 
-  // создаем айди для будущих обьектов
   const nameInputId = shortid.generate();
   const numberInputId = shortid.generate();
 
